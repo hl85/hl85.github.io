@@ -9,6 +9,7 @@ http://openq.cn/use-the-data-in-the-local-application-of-the-uri-scheme/
 http://openq.cn/facebook-phonegap-mosync-cross-platform-architecture-urine-point-js-framework/
 http://openq.cn/html5-mobile-development-practices/
 http://openq.cn/daytime-working-programmers-vs-night-programmer-translation/
+http://openq.cn/paros-monitoring-iphone-issued-http-requests/
 http://openq.cn/ios-regex/
 http://openq.cn/aboutwebkit/
 http://openq.cn/goodbook-gettingrea/
@@ -20,6 +21,7 @@ http://openq.cn/tag/svn/
 http://openq.cn/tag/mac-tools/
 http://openq.cn/tag/cloud-engine/
 http://openq.cn/tag//
+http://openq.cn/tag/tools/
 http://openq.cn/tag/iOS/
 http://openq.cn/tag/regex/
 http://openq.cn/tag/cultivation/
@@ -38,4 +40,5 @@ http://openq.cn/page/2/
 http://openq.cn/page/3/
 http://openq.cn/page/4/
 http://openq.cn/page/5/
+http://openq.cn/page/6/
 http://openq.cn/404.html

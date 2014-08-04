@@ -4,8 +4,18 @@
 <head>
     <meta charset="utf-8">
     
+
+<meta name="description" content="注：实际上Paros是一个跨平台抓包工具，其原理是通过pc端开放代理-&gt;终端设置pc开放的代理从而实现终端流量经过pc端后进行抓包。本文主要介绍mac通过wifi共享热点来抓包，实际上只要保证pc与终端同时在一个局域网即可实现抓包。另外，如果通过mac共享来抓包的话，还有更多选择比如：Http">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="hl13571">
+<meta name="twitter:title" content="使用Paros监控终端发出的HTTP请求">
+<meta name="twitter:description" content="注：实际上Paros是一个跨平台抓包工具，其原理是通过pc端开放代理-&gt;终端设置pc开放的代理从而实现终端流量经过pc端后进行抓包。本文主要介绍mac通过wifi共享热点来抓包，实际上只要保证pc与终端同时在一个局域网即可实现抓包。另外，如果通过mac共享来抓包的话，还有更多选择比如：Http">
+<meta name="twitter:creator" content="hl13571">
+
+
     <title>
- | openQ
+使用Paros监控终端发出的HTTP请求 | openQ
 </title>
     <!-- <link href='http://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'> -->
     <link rel="stylesheet" href="http://openq.cn/static/css/style.css?v=93a21dd84893fe7b3512f972ded50a5c" type="text/css" />
@@ -42,21 +52,66 @@
 <div id="content">
     
 <div class="article">
-	<div class="inner">
-		<h2 class="title">Articles posted in "2011"</h2>
-		<div class="text">
-			<ul>
-				
-				<li>
-					<span class="time_stamp">2011-12-27</span>
-					<a href="http://openq.cn/Mobile-APP-UI-Design/">移动应用UI设计规范</a>
-				</li>
-				
-			</ul>
-		</div>
-	</div>
-</div>
+    <div class="inner">
+        <h2 class="article_title title"><a href="#">使用Paros监控终端发出的HTTP请求</a></h2>
+        <div class="article_meta">
+            <div class="share">
+                <a href="https://twitter.com/share" class="twitter-share-button" data-via="hl13571" data-lang="zh-cn">Tweet</a>
+            </div>
+            <span>on</span>
+            2012-02-26
+        </div>
 
+        <div class="text">
+            <article>
+            <p><strong><em>注</em></strong>：实际上Paros是一个跨平台抓包工具，其原理是通过pc端开放代理-&gt;终端设置pc开放的代理从而实现终端流量经过pc端后进行抓包。本文主要介绍mac通过wifi共享热点来抓包，实际上只要保证pc与终端同时在一个局域网即可实现抓包。另外，如果通过mac共享来抓包的话，还有更多选择比如：HttpScoop、Wireshark，甚至命令行工具tcpflow。  </p>
+
+<p>电脑上的许多软件可以监控浏览器发出的HTTP请求, iPhone上有许多连网程序但没有自带软件可以实现监控, 为了方便测试这些请求是否正确而省去在程序中记录请求日志并逐一查找的麻烦, 可以利用Paros这个监控软件来实现.   </p>
+
+<p>以下是实现在Mac上监控iPhone发出的HTTP请求的具体步骤:   </p>
+
+<ol>
+<li><p>将Mac机器的以太网共享给无线局域网: Mac上: 系统偏好设置-&gt;共享-&gt;Internet 共享, 将”以太网”共享给”AirPort”   </p></li>
+<li><p>查看无线局域网IP: 返回-&gt;网络-&gt;AirPort, 查看到AirPort具有IP地址”169.254.242.107″   </p></li>
+<li><p>设置Paros本地代理: Paros-&gt;Tools-&gt;Options-&gt;Local proxy, Address填上”169.254.242.107″, 端口默认为8080   </p></li>
+<li><p>设置iPhone上网代理: iPhone上: 设置-&gt;无线局域网-&gt;选上Mac机器共享出去的网络-&gt;按”Details”箭头-&gt;Http代理-&gt;手动-&gt;服务器填”169.254.242.107″, 端口填”8080″   </p></li>
+<li><p>查看HTTP请求: iPhone打开访问任何连网程序, 可以在Paros的Sites下看到访问的网站, 右边可以选Reques/Response等信息.  </p></li>
+</ol>
+
+<p>源码地址：<a href="http://sourceforge.net/projects/paros/">http://sourceforge.net/projects/paros/</a>  </p>
+
+            </article>
+        </div>
+        
+        <div class="big_sep"></div>
+        <div class="article_meta">
+            <span>tagged:</span>
+            
+                <a class="tag" href="http://openq.cn/tag/tools/">tools</a>
+            
+        </div>
+        
+
+        <div class="big_sep"></div>
+        <!--<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>-->
+        
+    
+        
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+				var disqus_title = "";
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://openq.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        
+        
+    
+
+    </div>
+</div>
 
 </div>
 <div id="footer_wrapper">
