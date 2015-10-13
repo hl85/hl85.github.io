@@ -56,39 +56,47 @@ xcode中的单元测试 | openQ
         
             <a class="nav-tag" href="http://openq.cn/tag/工具/">工具 (5)</a>
         
+            <a class="nav-tag" href="http://openq.cn/tag/设计/">设计 (4)</a>
+        
             <a class="nav-tag" href="http://openq.cn/tag/后端/">后端 (4)</a>
         
             <a class="nav-tag" href="http://openq.cn/tag/前端/">前端 (4)</a>
         
-            <a class="nav-tag" href="http://openq.cn/tag/设计/">设计 (4)</a>
-        
             <a class="nav-tag" href="http://openq.cn/tag/最佳实践/">最佳实践 (3)</a>
         
-            <a class="nav-tag" href="http://openq.cn/tag/svn/">svn (2)</a>
+            <a class="nav-tag" href="http://openq.cn/tag/Hybrid/">Hybrid (2)</a>
         
             <a class="nav-tag" href="http://openq.cn/tag/阅读/">阅读 (2)</a>
-        
-            <a class="nav-tag" href="http://openq.cn/tag/hybrid/">hybrid (2)</a>
-        
-            <a class="nav-tag" href="http://openq.cn/tag/有趣/">有趣 (2)</a>
         
             <a class="nav-tag" href="http://openq.cn/tag/正则/">正则 (2)</a>
         
             <a class="nav-tag" href="http://openq.cn/tag/测试/">测试 (2)</a>
         
+            <a class="nav-tag" href="http://openq.cn/tag/有趣/">有趣 (2)</a>
+        
             <a class="nav-tag" href="http://openq.cn/tag/观点/">观点 (2)</a>
+        
+            <a class="nav-tag" href="http://openq.cn/tag/Git/">Git (1)</a>
+        
+            <a class="nav-tag" href="http://openq.cn/tag/Java/">Java (1)</a>
+        
+            <a class="nav-tag" href="http://openq.cn/tag/Perl/">Perl (1)</a>
+        
+            <a class="nav-tag" href="http://openq.cn/tag/WebKit/">WebKit (1)</a>
+        
+            <a class="nav-tag" href="http://openq.cn/tag/Android/">Android (1)</a>
+        
+            <a class="nav-tag" href="http://openq.cn/tag/Mac/">Mac (1)</a>
+        
+            <a class="nav-tag" href="http://openq.cn/tag/SVN/">SVN (1)</a>
+        
+            <a class="nav-tag" href="http://openq.cn/tag/本站/">本站 (1)</a>
+        
+            <a class="nav-tag" href="http://openq.cn/tag/svn/">svn (1)</a>
         
             <a class="nav-tag" href="http://openq.cn/tag/会议/">会议 (1)</a>
         
-            <a class="nav-tag" href="http://openq.cn/tag/git/">git (1)</a>
-        
-            <a class="nav-tag" href="http://openq.cn/tag/perl/">perl (1)</a>
-        
-            <a class="nav-tag" href="http://openq.cn/tag/mac/">mac (1)</a>
-        
-            <a class="nav-tag" href="http://openq.cn/tag/webkit/">webkit (1)</a>
-        
-            <a class="nav-tag" href="http://openq.cn/tag/本站/">本站 (1)</a>
+            <a class="nav-tag" href="http://openq.cn/tag/Coding/">Coding (1)</a>
         
             </div>
        
@@ -116,9 +124,9 @@ xcode中的单元测试 | openQ
         <div class="post-description">
             <p><p>很抱歉，由于服务器变迁，该文已经丢失，相关知识您可以移步<a href="https://developer.apple.com/search/?q=xcode%20unit%20test&platform=iOS&platform=General">苹果官方文档</a>查询。  </p>
 
-<p>很多丢失的文章我都已经找回来了，但是这篇文章我不准备找了，原因是我在手机端单元测试实施的必要性上的认识有所改变。如果您现在是做后台开发，我会强烈建议您针对数据库、业务逻辑等层都加入单元测试，因为在大规模（或者多年迭代）的系统中实施单元测试是服务品质的有效保障，并且实施成本基本是可控的、微量的。但是，在移动端技术、架构变化明显过快，开发迭代周期非常快，根据我多年后台和移动端开发经验，后台大面积重构一般是一年一两次，但是手机端每个月都有可能，甚至每个月都会有多次重构。更普遍的情况是，移动端开发人员要面对一两个月就要开发一个产品出来，如此的节奏想维护单元测试用昂贵来形容真不为过。另外，手机端一般不存在大量的不同层次、不同部门对接的情况（当然如果你是做sdk，接口相对稳定，还是值得做一做的）。  </p>
+<p>很多丢失的文章我都已经找回来了，但是这篇文章我不准备找了，原因是我在手机端单元测试实施的必要性上的认识有所改变。如果您现在是做后台开发，我会强烈建议您针对数据库、业务逻辑等层都加入单元测试，因为在大规模（或者多年迭代）的系统中实施单元测试是服务品质的有效保障，并且实施成本基本是可控的、微量的——尤其涉及到上下游接口的业务接口时更能解决下游开发者的宝贵时间。但是在移动端，技术、架构变化明显过快，开发迭代周期非常短（根据我多年后台和移动端开发经验，后台大面积重构一般是一年一两次，但是手机端每个月都有可能，甚至每个月都会有多次重构。甚至发版频率达到两周一般，如果不是为了降低打扰用户，我猜甚至会达到一周一版）如此的节奏想维护单元测试用昂贵来形容真不为过。另外，手机端一般不存在大量的不同层次、不同部门对接的情况（当然如果你是做sdk，接口相对稳定，还是值得做一做的）。  </p>
 
-<p>因此，我虽然尝试了多年在项目中实施单元测试，却从来没有大面积推广成功过（个人或者某个业务线曾经做的不错）。有如此的精力还不如推动持续集成，更多的更妙的技术储备上。  </p>
+<p>因此，我虽然尝试了多年在项目中实施单元测试，却从来没有大面积推广成功过（仅仅能做到个人或者某个业务线曾经做的不错）。有如此的精力还不如推动持续集成，更多、更妙的技术储备上。  </p>
 
 <p>其实，开发人员对编程规范、程序设计原则遵守的足够好，团队在review、代码提交校验上做的足够的话，代码质量还是有保障的。  </p>
 </p>
@@ -146,6 +154,8 @@ xcode中的单元测试 | openQ
    <footer class="footer">
          <div class="pure-menu pure-menu-horizontal pure-menu-open">
         <ul>
+            
+            <li><a href="http://openq.cn/archive/2015/">2015 (1)</a></li>
             
             <li><a href="http://openq.cn/archive/2014/">2014 (5)</a></li>
             

@@ -3,8 +3,107 @@
     <title>openQ</title>
     <link href="" rel="self" />
     <link href="http://openq.cn/" />
-    <updated>2014-09-12T12:30:00Z</updated>
+    <updated>2015-10-13T10:17:00Z</updated>
     <id>http://openq.cn/</id>
+    
+    <entry>
+        <title><![CDATA[jOOR源码设计简析]]></title>
+        <author><name>山姆是个好蜀黍</name><uri>http://openq.cn/</uri></author>
+        <link href="http://openq.cn/joor-source-code-analysis/"/>
+        <updated>2015-10-13T10:17:00Z</updated>
+        <published>2015-10-13T10:17:00Z</published>
+        <id>http://openq.cn/joor-source-code-analysis/</id>
+        <content type="html">
+            <![CDATA[
+             <p>大家都知道面向对象的一个基础工作就是将数据类型化，这样在处理复杂的概念体系系统或者维护系统长期健康发展是非常必要的。但是在实际开发过程中，还有很多场景通过非设计模式（或者说非常见设计模式）的办法可以实现非常优雅而且灵活的代码。前几天看到一篇文章<strong><a href="http://www.imooc.com/article/1518">Java 反射最佳实践</a></strong>文章介绍了一个非常优雅的反射解决方案：<strong><a href="https://github.com/jOOQ/jOOR">jOOR</a></strong>   </p>
+
+<p>Java中写反射竟然可以这么简单——  </p>
+
+<pre><code>// All examples assume the following static import:  
+import static org.joor.Reflect.*;  
+
+String world = on(&quot;java.lang.String&quot;)  // Like Class.forName()  
+                .create(&quot;Hello World&quot;) // Call most specific matching constructor  
+                .call(&quot;substring&quot;, 6)  // Call most specific matching substring() method  
+                .call(&quot;toString&quot;)      // Call toString()  
+                .get();                // Get the wrapped object, in this case a String  
+
+//Comparison  
+Employee[] employees = on(department).call(&quot;getEmployees&quot;).get();  
+
+for (Employee employee : employees) {  
+  Street street = on(employee).call(&quot;getAddress&quot;).call(&quot;getStreet&quot;).get();  
+  System.out.println(street);  
+}</code></pre>
+
+<p>这么漂亮的设计一定得读一下<a href="https://github.com/jOOQ/jOOR/blob/master/jOOR/src/main/java/org/joor/Reflect.java">源码</a>了<br/>
+作者的实现代码同样漂亮，简单摘取一二：  </p>
+
+<p>1、私有化构造器，从而强制用户使用静态on方法（是不是想到了单例）  </p>
+
+<pre><code>// Constructors  
+    private Reflect(Class&lt;?&gt; type) {  
+        this.object = type;   
+        this.isClass = true; //通过这个开关实现object与class的结构复用，除了on的复用还有类级别方法、实例级别方法的复用（见3）  
+    }  
+
+    private Reflect(Object object) {  
+        this.object = object;  
+        this.isClass = false;  
+    }</code></pre>
+
+<p>2、对外提供的接口就是这两个了，通过返回Reflect实例来实现链式调用（与单例不同的是这里每次都创建一个实例，所以从实际需求出发，就不存在多线程问题了）  </p>
+
+<pre><code>public static Reflect on(String name) throws ReflectException {  
+        return on(forName(name));  
+    }  
+    public static Reflect on(String name, ClassLoader classLoader) throws ReflectException {  
+        return on(forName(name, classLoader));  
+    }</code></pre>
+
+<p>3、Reflect的实例方法同样都通过返回对象来实现链式风格调用。而具体实现中，每次链式调用返回的对象都是Reflect，响应级别的目标对象存储在Reflect.object中，这种『递归』式的复用设计让人拍案叫绝。  </p>
+
+<pre><code>//创建一个目标对象的wapper，因为很多反射场景中你根本拿不到调用对象的类型（比如系统私有类）所以这么包装不只是为了链式调用，还有实际场景考虑——一箭双雕。  
+    public Reflect create() throws ReflectException {  
+        return create(new Object[0]);  
+    }  
+     //目标对象方法调用  
+     //需要传参可以调用这个：call(String name, Object... args) throws ReflectException   
+    public Reflect call(String name) throws ReflectException {  
+        return call(name, new Object[0]);  
+    }  
+
+    //获得目标实例&lt;T&gt;  
+    public &lt;T&gt; T get() {  
+        return (T) object;  
+    }  
+    //获得目标对象的属性  
+    public Reflect field(String name) throws ReflectException {  
+        try {  
+            Field field = field0(name);  
+            return on(field.get(object));  
+        }  
+        catch (Exception e) {  
+            throw new ReflectException(e);  
+        }  
+    }</code></pre>
+
+<p>4、神奇的抽象代理机制：通过代理类就可以在拿不到目标类型的时候类型化调用了，这里展示一下调用demo吧，这个机制算是整体机制的补充，具体实现还请异步自己看源代码咯。  </p>
+
+<pre><code>public interface StringProxy {  
+  String substring(int beginIndex);  
+}  
+
+String substring = on(&quot;java.lang.String&quot;)  
+                    .create(&quot;Hello World&quot;)  
+                    .as(StringProxy.class) // Create a proxy for the wrapped object  
+                    .substring(6);         // 【重点】Call a proxy method</code></pre>
+
+<p>忽然想到其实其他语言里边也需要类似的机制，比如反射更加灵活的oc，哪天有时间可以尝试搞一搞。</p>
+
+            ]]>
+        </content>
+    </entry>
     
     <entry>
         <title><![CDATA[如何通过svn,git进行优雅的代码集成]]></title>
@@ -151,45 +250,6 @@ versions（收费，<a href="http://www.versionsapp.com/">正版下载</a>，<a 
 2、在空间设置里填入301转向。<br/>
 齐活儿！<br/>
 现在大家可以访问一下<a href="http://appfanr.com"><a href="http://appfanr.com">http://appfanr.com</a></a>，另外也可以命令行查一下:<strong>whois appfanr.com</strong> 或者是 <strong>dig appfanr.com</strong>，服务、速度比以前见过的很多收费空间都不差！关键是，不被墙啊！  </p>
-
-            ]]>
-        </content>
-    </entry>
-    
-    <entry>
-        <title><![CDATA[Hello, Baby!]]></title>
-        <author><name>山姆是个好蜀黍</name><uri>http://openq.cn/</uri></author>
-        <link href="http://openq.cn/hello-baby/"/>
-        <updated>2014-07-15T10:18:00Z</updated>
-        <published>2014-07-15T10:18:00Z</published>
-        <id>http://openq.cn/hello-baby/</id>
-        <content type="html">
-            <![CDATA[
-             <p>你好，宝贝儿！<br/>
-准备用<a href="https://github.com/whtsky/catsup">Catsup</a>写点东西，被那些复杂程序玩儿残了，自己的清净之地就用<strong>MarkDown</strong>啦    ~~<br/>
-<strong>用vim写东西好有古感哟~~</strong>  </p>
-<div class="highlight"><pre><span class="k">print</span><span class="p">(</span><span class="s">&quot;漂漂漂漂,漂~亮!&quot;</span><span class="p">)</span>
-</pre></div>
-
-<p>Catsup有两个问题：  </p>
-
-<p>1、catsup deploy 参数并没有达到我要的效果，没有提交到hl85.github.io上而是提交到了openq-blog上。（很显然配置参数没有生效）。理论上应该自动提交到两个repo上一个是编辑源。现在暂时通过shell脚本解决。<strong>已解决</strong><br/>
-2、SealScript引用了google的字体(themes\sealscript\templates\layout.html)，还有一个twitter的js(themes\sealscript\templates\post.html)导致页面展现缓慢。按照文档说明我将这个theme下载下来合并到编辑源，注释掉了这两部分代码，重新build，现在查看网页源文件可以看到访问速度已经提上来了。<strong>已解决</strong><br/>
-3、catsup server有监视写作路径并动态生成，但是生成后没有刷新web server的缓存（etag都没变），导致生成了，扔不能在浏览器预览。现在通过shell实时push到hl85.github.io上了，可以在这个路径下实时浏览，算是解决了。<strong>已解决</strong>  </p>
-
-<p>针对这个博客要做的：  </p>
-
-<p>1、将appfanr没有遗失的部分blog整理迁移过来。<br/>
-    - 人人（<strong><em>完成</em></strong>）<br/>
-    - 豆瓣（<strong><em>完成</em></strong>）<br/>
-    - qq空间（<strong><em>完成</em></strong>）<br/>
-    - 新浪（<strong><em>完成</em></strong>）<br/>
-    - cnblogs（<strong><em>完成</em></strong>）<br/>
-2、SealScript，这个风格我还不是很满意。通过学习<a href="http://purecss.io/">purecss</a>的博客<a herf="http://purecss.io/layouts/blog/">Demo</a>（响应式）重新定义了一个还不够完善，但是再深入处理就要修改catsup源代码了。<strong>完成</strong><br/>
-3、把最近关注的问题都写出来。<strong>进行中</strong><br/>
-4、学习YAML，让界面表达更丰富一点。<strong>完成</strong><br/>
-5、将openq.cn绑到这个域名下，将appfanr.com（以后就不在appfanr写博客了）301到openq.cn。利用FREEHOSTING.COM提供的免费服务解决[参见:<a href="/cloud-cant-do">云引擎做不到</a>]。<strong>完成</strong><br/>
-6、9.12新增任务，通过修改catsup，让过程更顺畅（发布流程）、界面更美观（智能简介、多色标签、图片压缩处理等）。<strong>未启动</strong>  </p>
 
             ]]>
         </content>
